@@ -208,6 +208,7 @@ print(hero.hp)
 print(enemy.hp)
 hero.hit(enemy)
 
+###
 group = Group()
 group.add_member(hero)
 group.add_member(enemy)
