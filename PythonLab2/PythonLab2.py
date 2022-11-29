@@ -174,7 +174,7 @@ class Group:
         for item in self.members:
             item.print()
 
-    def import_file(self, file_name):
+    def import_file(self):
         raw_party = json.load(open('data.json', 'r'))
         self.members = []
         for member in raw_party["members"]:
