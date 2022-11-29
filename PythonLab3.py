@@ -18,3 +18,9 @@ randlist.sort()
 print(f"Сумма 100 случайных значений:\n")
 (Sum[Rand] == sum_(X, for_each = X)) <= X.in_(Rand)
 print(f"{Sum[randlist] == RandSum}\n")
+
+print(f"Медиана:\n")
+(Median[Rand] == Result) <= ((Rand[49] + Rand[50]) / 2 == Result)
+print(Median[randlist] == Median)
+
+
