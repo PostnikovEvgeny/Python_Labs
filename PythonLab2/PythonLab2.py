@@ -1,4 +1,5 @@
 import json
+from pickletools import TAKEN_FROM_ARGUMENT1
 import sys
 
 
@@ -35,7 +36,7 @@ class Weapon:
     def range(self,_range):
         try:
             if _range <= 0:
-                print("The weapon has unreal range")
+                raise ValueError
             self.__range = _range
         except ValueError:
             print("The weapon has unreal range",file = sys.stderr)
@@ -65,21 +66,27 @@ class Gun(Weapon):
         self.__mode = mode
 
     def hit(self, actor, target):
-        if target.is_alive() == False:
-            print("The enemy is dead")
-            return 
-        if actor.posX + self.range < target.posX or actor.posY + self.range < target.posY:
-                
-            print("The enemy is too far for this weapon")
-            return 
-        else:
+        #try: 
+        #    if target.is_alive() == False:
+        #        raise Exception
+            try:
+                if actor.posX + self.range < target.posX or actor.posY + self.range < target.posY:
+                    raise ValueError       
+            except ValueError:
+                print("The enemy is too far for this weapon",file = sys.stderr)
+
             if(self.mode):
                 for i in range (3):
                     target.hp -= self.damage
             else:
                 target.hp -= self.damage
-            print(f"The target was bitten by {self.name} with damage {self.damage}")
-    
+                print(f"The target was bitten by {self.name} with damage {self.damage}")
+
+        #except Exception:
+        #    print("The enemy is dead",file = sys.stderr)
+
+        
+        
 
     def print_mode(self):
         print(f"Mode of weapon is {self.mode}")
@@ -122,8 +129,10 @@ class Enemy(Person):
             self.weapon = args[3]
  
     def hit(self, target):
-        print("The enemy hits")
-        self.weapon.hit(self, target)
+        if(target.is_alive() & self.is_alive()):
+            print("The enemy hits")
+            self.weapon.hit(self, target)
+        
  
     def printPosition(self):
         return (f"The enemy on the position {self.pos_x, self.pos_y} with {self.weapon}")
@@ -145,8 +154,9 @@ class Hero(Person):
             self.weapon = args[4]
 
     def hit(self, target):
-        print("The hero hits")
-        self.weapon.hit(self,target)
+        if(target.is_alive()& self.is_alive()):
+            print("The hero hits")
+            self.weapon.hit(self,target)
 
     def print(self):
         print("Hero:"+ "name =" + self.name + ": hp = " + str(self.hp))
@@ -185,8 +195,8 @@ class Group:
         with open(file_name, "w") as the_file:
             the_file.write(self.to_json())
 
-kalash = Gun("Kalash",40,10,True)
-kalash.damage = -1
+kalash = Gun("Kalash",1000,10,True)
+#kalash.damage = -1
 #kalash.range= -1
 hero = Hero(1,2,300,"John",kalash)
 enemy = Enemy(11,2,120,kalash)
