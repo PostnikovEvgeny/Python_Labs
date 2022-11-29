@@ -1,5 +1,4 @@
 import json
-from pickletools import TAKEN_FROM_ARGUMENT1
 import sys
 
 
@@ -66,9 +65,7 @@ class Gun(Weapon):
         self.__mode = mode
 
     def hit(self, actor, target):
-        #try: 
-        #    if target.is_alive() == False:
-        #        raise Exception
+
             try:
                 if actor.posX + self.range < target.posX or actor.posY + self.range < target.posY:
                     raise ValueError       
@@ -82,11 +79,7 @@ class Gun(Weapon):
                 target.hp -= self.damage
                 print(f"The target was bitten by {self.name} with damage {self.damage}")
 
-        #except Exception:
-        #    print("The enemy is dead",file = sys.stderr)
-
-        
-        
+     
 
     def print_mode(self):
         print(f"Mode of weapon is {self.mode}")
@@ -182,20 +175,19 @@ class Group:
             item.print()
 
     def import_file(self, file_name):
-        with open(file_name, "r") as the_file:
-            raw_party = json.load(the_file)
-            self.members = []
-            for member in raw_party["members"]:
-                if 'name' in member:
-                    self.add_member(Hero(member))
-                else:
-                    self.add_member(Enemy(member))
+        raw_party = json.load(open('data.json', 'r'))
+        self.members = []
+        for member in raw_party["members"]:
+            if 'name' in member:
+                self.add_member(Hero(member))
+            else:
+                self.add_member(Enemy(member))
 
     def export_file(self, file_name):
         with open(file_name, "w") as the_file:
             the_file.write(self.to_json())
 
-kalash = Gun("Kalash",1000,10,True)
+kalash = Gun("Kalash",40,10,True)
 #kalash.damage = -1
 #kalash.range= -1
 hero = Hero(1,2,300,"John",kalash)
