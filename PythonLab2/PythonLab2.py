@@ -71,6 +71,7 @@ class Gun(Weapon):
                     raise ValueError       
             except ValueError:
                 print("The enemy is too far for this weapon",file = sys.stderr)
+                exit()
 
             if(self.mode):
                 for i in range (3):
