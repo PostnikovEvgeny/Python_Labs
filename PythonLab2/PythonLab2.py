@@ -1,6 +1,4 @@
 import json
-import sys
-
 
 class Weapon:
     
@@ -19,71 +17,42 @@ class Weapon:
         return self.__damage
     @damage.setter
     def damage(self,damage):
-        try:
-            if damage <= 0:
-                raise ValueError
-            self.__damage = damage
-        except ValueError:
-            print("The weapon has unreal damage",file = sys.stderr)
-            exit()
-        
+    
+         if damage <= 0:
+            raise ValueError
+         self.__damage = damage
 
+        
     @property 
     def range(self):
         return self.__range
     @range.setter
     def range(self,_range):
-        try:
             if _range <= 0:
                 raise ValueError
             self.__range = _range
-        except ValueError:
-            print("The weapon has unreal range",file = sys.stderr)
-            exit()
-
-    def print_name(self):
-        print(f"Name of weapon: {self.name}")
-    def print_damage(self):
-        print(f"Damage of {self.name} is {self.damage}")
-    def print_range(self):
-        print(f"Range of this weapon is {self.Range}")
-    
-    
-
+        
 
 class Gun(Weapon):
 
     def __init__(self,*args):
         super().__init__(args[0],args[1],args[2])
-        self.__mode = args[3]    # single - False; automatic - True
+        self.mode = args[3]    # single - False; automatic - True
 
-    @property
-    def mode(self):
-        return self.__mode
-    @mode.setter
-    def mode(self,mode):
-        self.__mode = mode
+
 
     def hit(self, actor, target):
 
-            try:
-                if actor.posX + self.range < target.posX or actor.posY + self.range < target.posY:
-                    raise ValueError       
-            except ValueError:
-                print("The enemy is too far for this weapon",file = sys.stderr)
-                exit()
+    
+            if actor.posX + self.range < target.posX or actor.posY + self.range < target.posY:
+                raise ValueError       
 
             if(self.mode):
                 for i in range (3):
                     target.hp -= self.damage
             else:
                 target.hp -= self.damage
-                print(f"The target was bitten by {self.name} with damage {self.damage}")
 
-     
-
-    def print_mode(self):
-        print(f"Mode of weapon is {self.mode}")
 
 class Person:
     def __init__(self,*args):
@@ -124,15 +93,8 @@ class Enemy(Person):
  
     def hit(self, target):
         if(target.is_alive() & self.is_alive()):
-            print("The enemy hits")
-            self.weapon.hit(self, target)
+            self.weapon.hit(self, target)   #enemy hits
         
- 
-    def printPosition(self):
-        return (f"The enemy on the position {self.pos_x, self.pos_y} with {self.weapon}")
-
-    def print(self):
-        print("Enemy : hp = " + str(self.hp))
 
 
 class Hero(Person):
@@ -149,12 +111,7 @@ class Hero(Person):
 
     def hit(self, target):
         if(target.is_alive()& self.is_alive()):
-            print("The hero hits")
-            self.weapon.hit(self,target)
-
-    def print(self):
-        print("Hero:"+ "name =" + self.name + ": hp = " + str(self.hp))
-
+            self.weapon.hit(self,target)    # hero hits
 
 
 class Group:
